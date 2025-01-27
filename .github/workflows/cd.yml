@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout code
+      # Checkout code
       - name: Checkout Code
         uses: actions/checkout@v3
       # Set up JDK
@@ -18,18 +18,15 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      # Step 2: Set up AWS Credentials
+      # Set up AWS Credentials
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-
-      # Step 3: Build JAR
-      - name: Build with Maven
-        run: mvn clean package
-
+      
+      # Generate Timestamp
       - name: Generate Timestamp
         run: echo "BUILD_TIMESTAMP=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_ENV
 
