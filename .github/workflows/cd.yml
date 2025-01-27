@@ -32,7 +32,7 @@ jobs:
 
       # Build JAR with Maven
       - name: Build with Maven
-        run: mvn clean package --batch-mode -DfinalName=twdevjobs-dev-${BUILD_TIMESTAMP}
+        run: mvn clean package --batch-mode -q -DfinalName=twdevjobs-dev-${BUILD_TIMESTAMP}
 
       # Rename JAR for Consistency
       - name: Rename JAR
