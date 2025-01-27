@@ -1,0 +1,40 @@
+name: CD - Deploy to Elastic Beanstalk
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up AWS Credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      # Step 3: Build JAR
+      - name: Build with Maven
+        run: mvn clean package
+
+      - name: Generate Timestamp
+        run: echo "BUILD_TIMESTAMP=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_ENV
+
+      # Build JAR with Maven
+      - name: Build with Maven
+        run: mvn clean package --batch-mode -DfinalName=twdevjobs-dev-${BUILD_TIMESTAMP}
+
+      # Rename JAR for Consistency
+      - name: Rename JAR
+        run: mv target/*.jar target/twdevjobs-dev-${BUILD_TIMESTAMP}.jar
+      # Upload to S3 Dev bucket artifact for build file
+      - name: Upload to S3
+        run: aws s3 cp target/twdevjobs-dev-${BUILD_TIMESTAMP}.jar s3://${{ secrets.DEV_BUCKET_NAME }}/artifact-build/twdevjobs-dev-${BUILD_TIMESTAMP}.jar
