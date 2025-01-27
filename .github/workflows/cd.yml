@@ -42,12 +42,12 @@ jobs:
         run: aws s3 cp target/twdevjobs-dev-${BUILD_TIMESTAMP}.jar s3://${{ secrets.DEV_BUCKET_NAME }}/artifact-build/twdevjobs-dev-${BUILD_TIMESTAMP}.jar
 
 
-          # Create Elastic Beanstalk Application Version
+      # Create Elastic Beanstalk Application Version
       - name: Create Application Version
         run: |
           aws elasticbeanstalk create-application-version \
-          --application-name "twdevjobs-dev-${BUILD_TIMESTAMP}" \
-          --version-label "${BUILD_TIMESTAMP}" \
+          --application-name "TWDevJobs-dev" \
+          --version-label "TWDevJobs-dev-${BUILD_TIMESTAMP}" \
           --source-bundle S3Bucket=${{ secrets.DEV_BUCKET_NAME }},S3Key=artifact-build/twdevjobs-dev-${BUILD_TIMESTAMP}.jar
 
       - name: Update Elastic Beanstalk Environment
