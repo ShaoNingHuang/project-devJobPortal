@@ -31,9 +31,19 @@ jobs:
       - name: Run Tests
         run: mvn test
 
-      - name: Upload build file to S3 Dev bucket
-        if: success() # Run this step only if the previous steps succeeded
-        run: aws s3 cp target/*.jar s3://${{ secrets.DEV_BUCKET_NAME }}/
+      - name: Generate Timestamp
+        run: echo "BUILD_TIMESTAMP=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_ENV
+
+            # Step 4: Build JAR with Maven
+      - name: Build with Maven
+        run: mvn clean package --batch-mode -DfinalName=twdevjobs-dev-${BUILD_TIMESTAMP}
+            
+            # Step 5: Rename JAR for Consistency
+      - name: Rename JAR
+        run: mv target/*.jar target/twdevjobs-dev-${BUILD_TIMESTAMP}.jar
+
+      - name: Upload to S3
+        run: aws s3 cp target/twdevjobs-dev-${BUILD_TIMESTAMP}.jar s3://${{ DEV_BUCKET_NAME }}
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
