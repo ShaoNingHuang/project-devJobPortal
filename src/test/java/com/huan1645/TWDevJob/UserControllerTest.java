@@ -8,8 +8,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,16 +16,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
 @AutoConfigureMockMvc
-public class HomeControllerTest {
+public class UserControllerTest {
     @Autowired
     MockMvc mockMvc;
 
     @Test
-    public void getHomepageTest() throws Exception {
-        MvcResult mvcresult = mockMvc.perform(MockMvcRequestBuilders.get("/"))
+    public void getRegistrationTest() throws Exception {
+        MvcResult mvcresult = mockMvc.perform(MockMvcRequestBuilders.get("/register"))
                 .andExpect(status().isOk())
                 .andReturn();
         ModelAndView mav = mvcresult.getModelAndView();
-        ModelAndViewAssert.assertViewName(mav, "index");
+        ModelAndViewAssert.assertViewName(mav, "register");
+        ModelAndViewAssert.assertModelAttributeAvailable(mav, "userTypes");
     }
+
 }
