@@ -40,3 +40,18 @@ jobs:
       # Upload to S3 Dev bucket artifact for build file
       - name: Upload to S3
         run: aws s3 cp target/twdevjobs-dev-${BUILD_TIMESTAMP}.jar s3://${{ secrets.DEV_BUCKET_NAME }}/artifact-build/twdevjobs-dev-${BUILD_TIMESTAMP}.jar
+
+
+      # Create Elastic Beanstalk Application Version
+      - name: Create Application Version
+        run: |
+          aws elasticbeanstalk create-application-version \
+          --application-name "TWDevJobs-dev" \
+          --version-label "TWDevJobs-dev-${BUILD_TIMESTAMP}" \
+          --source-bundle S3Bucket=${{ secrets.DEV_BUCKET_NAME }},S3Key=artifact-build/twdevjobs-dev-${BUILD_TIMESTAMP}.jar
+
+      - name: Update Elastic Beanstalk Environment
+        run: |
+          aws elasticbeanstalk update-environment \
+          --environment-name "TWDevJobs-DEV-ENV-3" \
+          --version-label "twdevjobs-dev-${BUILD_TIMESTAMP}"
