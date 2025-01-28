@@ -4,6 +4,7 @@ package com.huan1645.TWDevJob.controller;
 import com.huan1645.TWDevJob.entity.User;
 import com.huan1645.TWDevJob.entity.UserType;
 import com.huan1645.TWDevJob.exception.CustomErrorResponse;
+import com.huan1645.TWDevJob.exception.EmptyPasswordException;
 import com.huan1645.TWDevJob.exception.UserExistedException;
 import com.huan1645.TWDevJob.service.UserTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,16 @@ public class GlobalExceptionHandler {
         mav.addObject("user", new User());
         return mav;
     }
+    @ExceptionHandler
+    public ModelAndView EmptyPassword(EmptyPasswordException exec){
+        ModelAndView mav = new ModelAndView("register");
+        mav.addObject("errorMessage", exec.getMessage()); // Add the error message to the model
+        List<UserType> userTypes = userTypeService.getAll();
+        mav.addObject("userTypes", userTypes);
+        mav.addObject("user", new User());
+        return mav;
+    }
+
     @ExceptionHandler
     public ResponseEntity<CustomErrorResponse> GenericException(Exception exec){
         CustomErrorResponse error = new CustomErrorResponse();
