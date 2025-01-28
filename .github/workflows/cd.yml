@@ -41,11 +41,14 @@ jobs:
 
       # Rename JAR for Consistency
       - name: Rename JAR
-        run: mv target/*.jar target/twdevjobs-dev-${BUILD_TIMESTAMP}.jar
+        run: |
+          mv target/*.jar target/twdevjobs-dev-${BUILD_TIMESTAMP}.jar
+          echo "Renamed JAR file to: target/twdevjobs-dev-${BUILD_TIMESTAMP}.jar"
+          ls -la target/
+
       # Upload to S3 Dev bucket artifact for build file
       - name: Upload to S3
         run: aws s3 cp target/twdevjobs-dev-${BUILD_TIMESTAMP}.jar s3://${{ secrets.DEV_BUCKET_NAME }}/artifact-build/twdevjobs-dev-${BUILD_TIMESTAMP}.jar
-
 
 
       # Create Elastic Beanstalk Application Version
