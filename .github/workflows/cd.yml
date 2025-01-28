@@ -32,7 +32,7 @@ jobs:
 
       # Build JAR with Maven
       - name: Build with Maven
-        run: mvn clean package --batch-mode -q -Dspring.profiles.active=dev -DfinalName=twdevjobs-dev-${BUILD_TIMESTAMP}
+        run: mvn clean package --batch-mode -q -DfinalName=twdevjobs-dev-${BUILD_TIMESTAMP}
         env:
           SPRING_PROFILES_ACTIVE: dev
           DB_HOSTNAME: ${{ secrets.DB_HOSTNAME }}
