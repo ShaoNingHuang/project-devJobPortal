@@ -35,9 +35,6 @@ jobs:
         run: mvn clean package --batch-mode -q
         env:
           SPRING_PROFILES_ACTIVE: dev
-          DB_HOSTNAME: ${{ secrets.DB_HOSTNAME }}
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
       # Rename JAR for Consistency
       - name: Rename JAR
