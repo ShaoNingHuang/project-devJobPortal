@@ -3,6 +3,7 @@ package com.huan1645.TWDevJob;
 import static org.mockito.Mockito.*;
 import com.huan1645.TWDevJob.entity.User;
 import com.huan1645.TWDevJob.entity.UserType;
+import com.huan1645.TWDevJob.exception.EmptyPasswordException;
 import com.huan1645.TWDevJob.exception.UserExistedException;
 import com.huan1645.TWDevJob.repository.UserRepoInterface;
 import com.huan1645.TWDevJob.service.UserService;
@@ -75,6 +76,15 @@ public class UserServiceTest {
           when(repo.findByEmail(testUser.getEmail())).thenThrow(new UserExistedException("User already Existed"));
           assertThrows(UserExistedException.class, () -> {service.registerUser(testUser);}, "UserExistedException should be thrown");
           verify(repo, times(0)).save(testUser);
+    }
+
+    @Test
+    void registerEmptyPasswordException(){
+        User testUser = new User();
+        testUser.setEmail("test@example.com");
+        testUser.setPassword("    ");
+        assertThrows(EmptyPasswordException.class, () -> {service.registerUser(testUser);}, "EmptyPasswordException should be thrown");
+        verify(repo, times(0)).save(testUser);
     }
 
     @AfterEach
