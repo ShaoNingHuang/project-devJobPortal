@@ -30,8 +30,8 @@
     <div class="row">
         <div class="col-6 coffee_mug_background">
             <div class="logo_left mt-3 pt-4 ms-5 pl-5">
-                <h2 class="logo" style="color: white">
-                    TWDevJobs <span class="logo_com">.com</span>
+                <h2 class="logo" style="color: #002244">
+                    TWDevJobs <span class="logo_com">.job</span>
                 </h2>
             </div>
             <footer class="photo-footer">
@@ -53,6 +53,17 @@
                                 method="post"
                         >
                             <div class="box-body bozero mx2p">
+                                <!-- Error message display -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                                                <p th:text="${errorMessage}"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End error message display -->
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
