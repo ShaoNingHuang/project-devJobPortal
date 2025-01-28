@@ -42,13 +42,11 @@ jobs:
       # Rename JAR for Consistency
       - name: Rename JAR
         run: |
-          mv target/*.jar target/DEV-V${BUILD_TIMESTAMP}.jar
-          echo "Renamed JAR file to: "
-          ls -la target/
+          mv target/*.jar target/DEV-v${BUILD_TIMESTAMP}.jar
 
       # Upload to S3 Dev bucket artifact for build file
       - name: Upload to S3
-        run: aws s3 cp target/DEV-V${BUILD_TIMESTAMP}.jar s3://${{ secrets.DEV_BUCKET_NAME }}/artifact-build/DEV-V${BUILD_TIMESTAMP}.jar
+        run: aws s3 cp target/DEV-v${BUILD_TIMESTAMP}.jar s3://${{ secrets.DEV_BUCKET_NAME }}/artifact-build/DEV-v${BUILD_TIMESTAMP}.jar
 
 
 
@@ -58,7 +56,7 @@ jobs:
           aws elasticbeanstalk create-application-version \
           --application-name "TWDevJobs-dev" \
           --version-label "TWDevJobs-dev-${BUILD_TIMESTAMP}" \
-          --source-bundle S3Bucket=${{ secrets.DEV_BUCKET_NAME }},S3Key=artifact-build/twdevjobs-dev-${BUILD_TIMESTAMP}.jar
+          --source-bundle S3Bucket=${{ secrets.DEV_BUCKET_NAME }},S3Key=artifact-build/DEV-v${BUILD_TIMESTAMP}.jar
 
       - name: Update Elastic Beanstalk Environment
         run: |
