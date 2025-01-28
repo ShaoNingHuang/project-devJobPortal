@@ -1,0 +1,86 @@
+package com.huan1645.TWDevJob;
+
+import static org.mockito.Mockito.*;
+import com.huan1645.TWDevJob.entity.User;
+import com.huan1645.TWDevJob.entity.UserType;
+import com.huan1645.TWDevJob.exception.UserExistedException;
+import com.huan1645.TWDevJob.repository.UserRepoInterface;
+import com.huan1645.TWDevJob.service.UserService;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.TestPropertySource;
+
+import java.util.Date;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
+
+
+@SpringBootTest
+@TestPropertySource("/application-test.properties")
+public class UserServiceTest {
+
+
+    @Mock
+    private UserRepoInterface repo;
+
+    @InjectMocks
+    private UserService service;
+
+    @Autowired
+    JdbcTemplate jdbc;
+
+    @BeforeEach
+    void setUp(){
+        jdbc.execute("DELETE FROM users;");
+    }
+
+    @Test
+    void registerUserTestSuccess(){
+        User testUser = new User();
+        testUser.setIs_active(false);
+        testUser.setEmail("test1@example.com");
+        testUser.setPassword("password123");
+
+        when(repo.findByEmail(testUser.getEmail())).thenReturn(Optional.empty());
+        when(repo.save(testUser)).thenAnswer(invocation -> {
+            User savedUser = invocation.getArgument(0);
+            savedUser.setUser_id(1); // Simulate auto-generated ID
+            return savedUser;
+        });
+
+        User registeredUser = service.registerUser(testUser);
+        assertNotNull(registeredUser, "The registered user should not be null.");
+        assertTrue(registeredUser.isIs_active(), "The user should be active after registration.");
+        assertNotNull(registeredUser.getRegistration_date(), "The registration date should be set.");
+        assertEquals(1, registeredUser.getUser_id(), "The user ID should be auto-generated and set correctly.");
+
+
+        verify(repo, times(1)).findByEmail(testUser.getEmail());
+        verify(repo, times(1)).save(testUser);
+    }
+
+    @Test
+    void registerUserException(){
+          User testUser = new User();
+          testUser.setEmail("test@example.com");
+          when(repo.findByEmail(testUser.getEmail())).thenThrow(new UserExistedException("User already Existed"));
+          assertThrows(UserExistedException.class, () -> {service.registerUser(testUser);}, "UserExistedException should be thrown");
+          verify(repo, times(0)).save(testUser);
+    }
+
+    @AfterEach
+    void cleanUp(){
+        jdbc.execute("DELETE FROM users;");
+    }
+
+
+}
