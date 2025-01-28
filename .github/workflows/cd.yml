@@ -32,7 +32,7 @@ jobs:
 
       # Build JAR with Maven
       - name: Build with Maven
-        run: mvn clean package --batch-mode -q -DfinalName=twdevjobs-dev-${BUILD_TIMESTAMP}
+        run: mvn clean package --batch-mode -q
         env:
           SPRING_PROFILES_ACTIVE: dev
           DB_HOSTNAME: ${{ secrets.DB_HOSTNAME }}
@@ -42,13 +42,14 @@ jobs:
       # Rename JAR for Consistency
       - name: Rename JAR
         run: |
-          mv target/*.jar target/twdevjobs-dev-${BUILD_TIMESTAMP}.jar
-          echo "Renamed JAR file to: target/twdevjobs-dev-${BUILD_TIMESTAMP}.jar"
+          mv target/*.jar target/DEV-V${BUILD_TIMESTAMP}.jar
+          echo "Renamed JAR file to: "
           ls -la target/
 
       # Upload to S3 Dev bucket artifact for build file
       - name: Upload to S3
-        run: aws s3 cp target/twdevjobs-dev-${BUILD_TIMESTAMP}.jar s3://${{ secrets.DEV_BUCKET_NAME }}/artifact-build/twdevjobs-dev-${BUILD_TIMESTAMP}.jar
+        run: aws s3 cp target/DEV-V${BUILD_TIMESTAMP}.jar s3://${{ secrets.DEV_BUCKET_NAME }}/artifact-build/DEV-V${BUILD_TIMESTAMP}.jar
+
 
 
       # Create Elastic Beanstalk Application Version
