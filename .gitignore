@@ -26,7 +26,7 @@ logs/
 
 # Spring Boot-specific files
 # Exclude environment-specific configuration files (if any)
-application-*.yml
+application.properties
 
 # Sensitive files
 .env
