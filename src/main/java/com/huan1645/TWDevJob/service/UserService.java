@@ -10,6 +10,7 @@ import com.huan1645.TWDevJob.repository.RecruiterProfileRepoInterface;
 import com.huan1645.TWDevJob.repository.UserRepoInterface;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -20,11 +21,15 @@ public class UserService {
     private final UserRepoInterface userRepo;
     private final RecruiterProfileRepoInterface recruiterRepo;
     private final JobSeekerProfileRepoInterface jobseekerRepo;
+    private final PasswordEncoder passwordEncoder;
+
+
     @Autowired
-    public UserService(UserRepoInterface userrepo, RecruiterProfileRepoInterface recruiterrepo, JobSeekerProfileRepoInterface jobseekerrepo) {
+    public UserService(UserRepoInterface userrepo, RecruiterProfileRepoInterface recruiterrepo, JobSeekerProfileRepoInterface jobseekerrepo, PasswordEncoder passwordEncoder) {
         this.userRepo = userrepo;
         this.recruiterRepo = recruiterrepo;
         this.jobseekerRepo = jobseekerrepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -37,6 +42,7 @@ public class UserService {
         }
         theUser.setIs_active(true);
         theUser.setRegistration_date(new Date(System.currentTimeMillis()));
+        theUser.setPassword(passwordEncoder.encode(theUser.getPassword()));
         User savedUser = userRepo.save(theUser);
         int type_id = savedUser.getUser_type_id().getUser_type_id();
         if (type_id == 1){
