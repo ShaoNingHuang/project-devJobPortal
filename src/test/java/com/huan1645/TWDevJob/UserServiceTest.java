@@ -2,6 +2,7 @@ package com.huan1645.TWDevJob;
 
 import static org.mockito.Mockito.*;
 
+import com.huan1645.TWDevJob.config.webSecurityConfig;
 import com.huan1645.TWDevJob.entity.JobSeekerProfile;
 import com.huan1645.TWDevJob.entity.RecruiterProfile;
 import com.huan1645.TWDevJob.entity.User;
@@ -19,7 +20,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.Date;
@@ -32,6 +36,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
+@Import(webSecurityConfig.class)
 public class UserServiceTest {
 
 
@@ -44,7 +49,8 @@ public class UserServiceTest {
     @Mock
     private JobSeekerProfileRepoInterface jobSeekerRepo;
 
-    @InjectMocks
+    private PasswordEncoder passwordEncoder;
+
     private UserService service;
 
     @Autowired
@@ -53,6 +59,8 @@ public class UserServiceTest {
     @BeforeEach
     void setUp(){
         jdbc.execute("DELETE FROM users;");
+        passwordEncoder = new BCryptPasswordEncoder();
+        service = new UserService(repo, recruiterRepo, jobSeekerRepo, passwordEncoder);
     }
 
     @Test
