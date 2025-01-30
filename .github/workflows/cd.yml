@@ -35,6 +35,9 @@ jobs:
         run: mvn clean package --batch-mode -q
         env:
           SPRING_PROFILES_ACTIVE: dev
+          AWS_ACCESS_KEYID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_ACCESS_SECRET_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_BUCKET: ${{ secrets.DEV_BUCKET_NAME }}
 
       # Rename JAR for Consistency
       - name: Rename JAR
