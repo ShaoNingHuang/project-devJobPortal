@@ -10,9 +10,14 @@ public class NoSecurityTestConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())  // Disable CSRF for testing
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll()); // Allow all requests
-
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().permitAll() // Allow all requests for testing
+                )
+                .logout(logout -> {
+                    logout.logoutUrl("/logout");
+                    logout.logoutSuccessUrl("/"); // Ensure this matches production
+                })
+                .csrf(csrf -> csrf.disable()); // Disable CSRF for testing
         return http.build();
     }
 }

@@ -7,11 +7,14 @@ import com.huan1645.TWDevJob.exception.CustomErrorResponse;
 import com.huan1645.TWDevJob.exception.EmptyPasswordException;
 import com.huan1645.TWDevJob.exception.UserExistedException;
 import com.huan1645.TWDevJob.service.UserTypeService;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Date;
@@ -51,7 +54,9 @@ public class GlobalExceptionHandler {
         error.setStatusCode(400);
         error.setMessage(exec.getMessage());
         error.setTimestamp(new Date());
+
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
+
 
 }
