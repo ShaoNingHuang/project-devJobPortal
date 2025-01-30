@@ -23,6 +23,15 @@ jobs:
         run: mvn clean package -q --batch-mode
         env:
           SPRING_PROFILES_ACTIVE: test
+          AWS_ACCESS_KEYID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_ACCESS_SECRET_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_BUCKET: ${{ secrets.DEV_BUCKET_NAME }}
+
       # Run Tests
       - name: Run Tests
         run: mvn test
+        env:
+          SPRING_PROFILES_ACTIVE: test
+          AWS_ACCESS_KEYID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_ACCESS_SECRET_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_BUCKET: ${{ secrets.DEV_BUCKET_NAME }}
