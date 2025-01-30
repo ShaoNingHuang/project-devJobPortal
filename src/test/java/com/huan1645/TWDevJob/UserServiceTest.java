@@ -22,10 +22,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Optional;
 
@@ -61,7 +66,40 @@ public class UserServiceTest {
         jdbc.execute("DELETE FROM users;");
         passwordEncoder = new BCryptPasswordEncoder();
         service = new UserService(repo, recruiterRepo, jobSeekerRepo, passwordEncoder);
+        SecurityContextHolder.clearContext();
     }
+
+    @Test
+    public void testGetCurrentUserProfile_Recruiter() {
+        // Mock Authentication
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getName()).thenReturn("recruiter@example.com");
+        when(authentication.getAuthorities()).thenReturn((Collection)Collections.singleton(new SimpleGrantedAuthority("Recruiter")));
+        when(authentication.isAuthenticated()).thenReturn(true);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // Mock User
+        User user = new User();
+        user.setUser_id(1);
+        user.setEmail("recruiter@example.com");
+        when(repo.findByEmail("recruiter@example.com")).thenReturn(Optional.of(user));
+
+        // Mock RecruiterProfile
+        RecruiterProfile recruiterProfile = new RecruiterProfile();
+        when(recruiterRepo.findById(1)).thenReturn(Optional.of(recruiterProfile));
+
+        // Call the method
+        Object result = service.getCurrentUserProfile();
+
+        // Verify the result
+        assertNotNull(result);
+        assertTrue(result instanceof RecruiterProfile);
+        verify(repo, times(1)).findByEmail("recruiter@example.com");
+        verify(recruiterRepo, times(1)).findById(1);
+    }
+
+
+
 
     @Test
     void registerUserTestSuccessRecruiter(){

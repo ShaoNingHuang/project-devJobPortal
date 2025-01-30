@@ -2,12 +2,14 @@ package com.huan1645.TWDevJob.service;
 
 import com.huan1645.TWDevJob.entity.UserType;
 import com.huan1645.TWDevJob.repository.UserTypeRepoInterface;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class UserTypeService {
     private final UserTypeRepoInterface userTypeRepo;
 

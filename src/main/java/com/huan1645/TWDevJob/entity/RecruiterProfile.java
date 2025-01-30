@@ -40,6 +40,10 @@ public class RecruiterProfile {
         this.profile_photo = profile_photo;
     }
 
+    public RecruiterProfile() {
+
+    }
+
     public User getUserId() {
         return userId;
     }
