@@ -23,8 +23,9 @@ public class JobSeekerProfile {
     private String employment_type;
     private String state;
     private String work_authorization;
-    @Column(nullable = true, length = 64)
+    @Column(nullable = true)
     private String profile_photo;
+    @Column(nullable = true)
     private String resume;
 
     @OneToMany(targetEntity = Skills.class, cascade = CascadeType.ALL, mappedBy = "jobSeekerProfile")
@@ -124,6 +125,7 @@ public class JobSeekerProfile {
         this.work_authorization = work_authorization;
     }
 
+    @Transient
     public String getProfile_photo() {
         return profile_photo;
     }
@@ -162,7 +164,6 @@ public class JobSeekerProfile {
                 ", work_authorization='" + work_authorization + '\'' +
                 ", profile_photo='" + profile_photo + '\'' +
                 ", resume='" + resume + '\'' +
-                ", skills=" + skills +
                 '}';
     }
 }

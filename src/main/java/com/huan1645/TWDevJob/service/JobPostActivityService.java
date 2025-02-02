@@ -6,8 +6,11 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -37,6 +40,14 @@ public class JobPostActivityService {
 
     public JobPostActivity getOne(int id) {
         return jobPostActivityRepo.findById(id).orElseThrow(()-> new RuntimeException("Job not found !"));
+    }
+
+    public List<JobPostActivity> getAll() {
+        return jobPostActivityRepo.findAll();
+    }
+
+    public List<JobPostActivity> search(String job, String location, List<String> type, List<String> remote, LocalDate searchDate) {
+        return Objects.isNull(searchDate)?jobPostActivityRepo.searchWithoutDate(job, location, remote, type):jobPostActivityRepo.search(job, location, remote, type, searchDate);
     }
 }
 

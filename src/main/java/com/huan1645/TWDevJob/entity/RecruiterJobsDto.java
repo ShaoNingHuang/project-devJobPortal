@@ -4,17 +4,17 @@ package com.huan1645.TWDevJob.entity;
 public class RecruiterJobsDto {
 
     private Long totalCandidates;
-    private Integer jobsPostId;
-    private String jobTitle;
-    private JobLocation jobLocation;
-    private JobCompany jobCompany;
+    private Integer job_post_id;
+    private String job_title;
+    private JobLocation job_location_id;
+    private JobCompany job_company_id;
 
     public RecruiterJobsDto(Long totalCandidates, Integer jobsPostId, String jobTitle, JobLocation jobLocation, JobCompany jobCompany) {
         this.totalCandidates = totalCandidates;
-        this.jobsPostId = jobsPostId;
-        this.jobTitle = jobTitle;
-        this.jobLocation = jobLocation;
-        this.jobCompany = jobCompany;
+        this.job_post_id = jobsPostId;
+        this.job_title = jobTitle;
+        this.job_location_id = jobLocation;
+        this.job_company_id = jobCompany;
     }
 
     public Long getTotalCandidates() {
@@ -25,35 +25,35 @@ public class RecruiterJobsDto {
         this.totalCandidates = totalCandidates;
     }
 
-    public Integer getJobsPostId() {
-        return jobsPostId;
+    public String getJob_title() {
+        return job_title;
     }
 
-    public void setJobsPostId(Integer jobsPostId) {
-        this.jobsPostId = jobsPostId;
+    public void setJob_title(String job_title) {
+        this.job_title = job_title;
     }
 
-    public String getJobTitle() {
-        return jobTitle;
+    public JobLocation getJob_location_id() {
+        return job_location_id;
     }
 
-    public void setJobTitle(String jobTitle) {
-        this.jobTitle = jobTitle;
+    public void setJob_location_id(JobLocation job_location_id) {
+        this.job_location_id = job_location_id;
     }
 
-    public JobLocation getJobLocation() {
-        return jobLocation;
+    public JobCompany getJob_company_id() {
+        return job_company_id;
     }
 
-    public void setJobLocation(JobLocation jobLocation) {
-        this.jobLocation = jobLocation;
+    public void setJob_company_id(JobCompany job_company_id) {
+        this.job_company_id = job_company_id;
     }
 
-    public JobCompany getJobCompany() {
-        return jobCompany;
+    public Integer getJob_post_id() {
+        return job_post_id;
     }
 
-    public void setJobCompany(JobCompany jobCompany) {
-        this.jobCompany = jobCompany;
+    public void setJob_post_id(Integer job_post_id) {
+        this.job_post_id = job_post_id;
     }
 }
