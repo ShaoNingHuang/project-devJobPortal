@@ -62,15 +62,15 @@ public class RecruiterProfileController {
             String fileName = file.getOriginalFilename();
             if(!(file.getOriginalFilename().isEmpty())){
                 fileName = UUID.randomUUID() + "_";
+                // Specify the folder name (e.g., "recruiter-profiles")
+                String folderName = "photos-recruiter";
+
+                // Upload the file to S3
+                String fileUrl = s3Service.uploadProfilePicture(folderName, fileName, file.getBytes());
+
+                // Save the file URL in the profile
+                profile.setProfile_photo(fileUrl);
             }
-            // Specify the folder name (e.g., "recruiter-profiles")
-            String folderName = "photos-recruiter";
-
-            // Upload the file to S3
-            String fileUrl = s3Service.uploadProfilePicture(folderName, fileName, file.getBytes());
-
-            // Save the file URL in the profile
-            profile.setProfile_photo(fileUrl);
         } catch (IOException e) {
             throw new profilePicUploadException("Error when uploading the profile page");
         }

@@ -20,7 +20,7 @@
 
 <header class="navbar navbar-expand-lg navbar-dark">
     <label class="mt-2 ms-5 font-weight-bold h5"
-    ><a th:href="@{/dashboard/}">hotdevjobs</a
+    ><a th:href="@{/dashboard/}">twDevjobs</a
     ><span class="logo_com font-weight-bold h5" style="color: white">
           .com</span
     ></label
@@ -130,7 +130,7 @@
 
             <div class="px-3 mb-3" sec:authorize="hasAuthority('Job Seeker')">
                 <label class="large-label "> Job Description </label>
-                <div th:utext="${jobDetails.descriptionOfJob}"></div>
+                <div th:utext="${jobDetails.description_of_job}"></div>
             </div>
 
             <div class="px-3 mb-3" sec:authorize="hasAuthority('Recruiter')">
@@ -143,9 +143,9 @@
                         <div class="candidatesApplied">
                             <label>Candidates Applied for Job</label>
                             <th:block th:each="applyList:${applyList}">
-                                <a th:href="@{/job-seeker-profile/{id}(id=${applyList.userId.userAccountId})}"
+                                <a th:href="@{/job-seeker-profile/{id}(id=${applyList.user_id.user_account_id})}"
                                    class="white"
-                                   th:text="${applyList.userId.firstName+', '+applyList.userId.lastName}">FirstName,
+                                   th:text="${applyList.user_id.first_name+', '+applyList.user_id.last_name}">FirstName,
                                     LastName</a>
                             </th:block>
                         </div>
@@ -156,7 +156,7 @@
             <div class="mt-3 px-3" sec:authorize="hasAuthority('Job Seeker')">
                 <div class="row">
                     <div class="col-md-3">
-                        <form th:action="@{/job-details/apply/{id}(id=${jobDetails.jobPostId})}" th:object="${applyJob}"
+                        <form th:action="@{/job-details/apply/{id}(id=${jobDetails.job_post_id})}" th:object="${applyJob}"
                               method="post">
                             <button class="btn-sec btn-red w-100" type="submit" th:if="${alreadyApplied == false}">Apply
                                 Now
@@ -167,7 +167,7 @@
                         </form>
                     </div>
                     <div class="col-md-3">
-                        <form th:action="@{/job-details/save/{id}(id=${jobDetails.jobPostId})}" th:object="${applyJob}"
+                        <form th:action="@{/job-details/save/{id}(id=${jobDetails.job_post_id})}" th:object="${applyJob}"
                               method="post">
                             <button class="btn-sec btn-black w-100" type="submit" th:if="${alreadySaved == false}">Save
                                 Job
